@@ -7,6 +7,7 @@ const resolvers = {
       return User.findOne({ username }).populate('savedBooks');
     },
     user: async (parent, { username }) => {
+      console.log("user");
       return User.findOne({ username }).populate('savedBooks');
     },
     book: async (parent, { bookId }) => {
@@ -15,7 +16,9 @@ const resolvers = {
   },
 
   Mutation: {
-    login: async (parent, { email, password }) => {
+    loginUser: async (parent, { email, password }) => {
+      console.log("login");
+
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -32,8 +35,8 @@ const resolvers = {
 
       return { token, user };
     },
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
+    addUser: async (parent, { userName, email, password }) => {
+      const user = await User.create({ username: userName, email: email, password: password });
       const token = signToken(user);
       return { token, user };
     },
@@ -48,11 +51,11 @@ const resolvers = {
 
     //   return updatedUser;
     // },
-    saveBook: async (parent, { userId, authors, description, title, BoodId, image, link }) => {
+    saveBook: async (parent, { userId, authors, description, title, BoodId, image}) => {
       return User.findOneAndUpdate(
         { _id: userId },
         {
-          $addToSet: { savedBooks: { authors, description, BoodId, image, link, title } },
+          $addToSet: { savedBooks: { authors, description, BoodId, image, title } },
         },
         {
           new: true,
