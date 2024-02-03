@@ -78,6 +78,7 @@ const resolvers = {
       );
     },
     removeBook: async (parent, { userId, BookId }) => {
+      console.log("removeBook", userId, BookId);
       return User.findOneAndUpdate(
         { _id: userId },
         { $pull: { savedBooks: { BoodId: BookId } } },

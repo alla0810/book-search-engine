@@ -17,23 +17,10 @@ import { useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { REMOVE_BOOK } from "../utils/mutations";
 
-const SavedBooks = () => {
-  console.log("SavedBooks");
 
-  const [userData, setUserData] = useState({});
-  const [deleteBook] = useMutation(REMOVE_BOOK);
-  const {loading, data} = useQuery(GET_ME, {});
-
-  useEffect(() => {
-    console.log("useEffect");
-  
-    if (data?.me)
-    {
-      const user = data.me;
-      setUserData(user);
-      console.log("userData", userData);
-    }
-  }, []);
+function DisplayBook({bookId, image, title, description, authors})
+{
+  const [deleteBook, {data, loading, error}] = useMutation(REMOVE_BOOK);    
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -44,21 +31,87 @@ const SavedBooks = () => {
     }
 
     const userId = Auth.getProfile().data._id;    
-    const updatedUser = await deleteBook({
+    const userData = await deleteBook({
       variables: {
         userId: userId,
         BookId: bookId,
       }
     });
 
-    setUserData(updatedUser);
-
     removeBookId(bookId);
   };
 
+  return (
+    <Col md="4">
+      <Card key={bookId} border='dark'>
+        {image ? <Card.Img src={image} alt={`The cover for ${title}`} variant='top' /> : null}
+        <Card.Body>
+          <Card.Title>{title}</Card.Title>
+          <p className='small'>Authors: {authors}</p>
+          <Card.Text>{description}</Card.Text>
+          <Button className='btn-block btn-danger' onClick={() => handleDeleteBook({bookId})}>
+            Delete this Book!
+          </Button>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+
+}
+
+const SavedBooks = () => {
+  const [deleteBook] = useMutation(REMOVE_BOOK);    
+
+  console.log("SavedBooks");
+  var userData;
+  const {loading, data} = useQuery(GET_ME, {});  
+
+  if (data)
+  {
+    userData = data.me;
+  }
+
+  if (userData) {
+    console.log("userData", userData);
+  }
+
+  // useEffect(() => {
+  //   console.log("useEffect");
+  
+  //   if (data?.me)
+  //   {
+  //     const user = data.me;
+  //     setUserData(user);
+  //     console.log("userData", userData);
+  //   }
+  // }, [data]);
+
+// create function that accepts the book's mongo _id value as param and deletes the book from the database
+const handleDeleteBook = async (bookId) => {
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+  if (!token) {
+    return false;
+  }
+
+  const userId = Auth.getProfile().data._id;    
+  const updatedUser = await deleteBook({
+    variables: {
+      userId: userId,
+      BookId: bookId,
+    }
+  });
+
+  removeBookId(bookId);
+};
+
   // if data isn't here yet, say so
   if (loading) {
-    return <h2>LOADING...</h2>;
+    return (<h2>LOADING...</h2>);
+  }
+
+  if (!userData) {
+    return (<h2>LOADING...</h2>);
   }
 
   return (
@@ -75,7 +128,7 @@ const SavedBooks = () => {
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+        {userData.savedBooks.map((book) => {
             return (
               <Col md="4">
                 <Card key={book.bookId} border='dark'>
