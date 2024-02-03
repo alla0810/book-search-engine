@@ -13,7 +13,6 @@ const typeDefs = `
     description: String!
     title: String!
     image: String
-    link: String
   }
 
   type Auth {
@@ -22,7 +21,7 @@ const typeDefs = `
   }
 
   type Query {
-    me(username: String!): User
+    me(userId: ID!): User
     user(username: String!): User
     book(bookId: ID!): Book
   }

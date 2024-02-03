@@ -3,8 +3,8 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
   Query: {
-    me: async (parent, { username }) => {
-      return User.findOne({ username }).populate('savedBooks');
+    me: async (parent, { userId }) => {
+      return User.findOne({ _id: userId }).populate('savedBooks');
     },
     user: async (parent, { username }) => {
       console.log("user");
@@ -17,7 +17,7 @@ const resolvers = {
 
   Mutation: {
     loginUser: async (parent, { email, password }) => {
-      console.log("login");
+      console.log("loginUser", email, password);
 
       const user = await User.findOne({ email });
 
@@ -33,11 +33,18 @@ const resolvers = {
 
       const token = signToken(user);
 
+      console.log("token", token);
+
       return { token, user };
     },
     addUser: async (parent, { userName, email, password }) => {
+      console.log("addUser", userName, email, password);
+
       const user = await User.create({ username: userName, email: email, password: password });
       const token = signToken(user);
+
+      console.log("token", token);
+
       return { token, user };
     },
     // saveBook: async (parent, {username, authors, description, title, BookId, image, link}) => {
@@ -51,11 +58,13 @@ const resolvers = {
 
     //   return updatedUser;
     // },
-    saveBook: async (parent, { userId, authors, description, title, BoodId, image}) => {
+    saveBook: async (parent, { userId, authors, description, title, BookId, image}) => {
+//      console.log("saveBook", userId, authors, description, title, BookId, image);
+
       return User.findOneAndUpdate(
         { _id: userId },
         {
-          $addToSet: { savedBooks: { authors, description, BoodId, image, title } },
+          $addToSet: { savedBooks: { authors: authors, description: description, bookId: BookId, image: image, title: title } },
         },
         {
           new: true,

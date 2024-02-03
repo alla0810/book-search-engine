@@ -7,14 +7,15 @@ import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 
 const SignupForm = () => {
+  console.log("SignupForm");
+
   // set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
- const [addUser] = useMutation(ADD_USER);
-
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
+  const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -24,20 +25,22 @@ const SignupForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+    // // check if form has everything (as per react-bootstrap docs)
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    // }
 
     const mutationResponse = await addUser({
       variables: {
+        userName: userFormData.username,        
         email: userFormData.email,
-        password: userFormData.password,
-        userName: userFormData.userName
+        password: userFormData.password
       },
     });
+    console.log("mutationResponse", mutationResponse);
+
     const token = mutationResponse.data.addUser.token;
     Auth.login(token);
 

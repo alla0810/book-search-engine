@@ -80,16 +80,20 @@ const SearchBooks = () => {
     console.log("bookToSave", bookToSave);
 
     const userId = Auth.getProfile().data._id;    
-    await saveBook({
+    console.log("userId", userId);
+
+    const response = await saveBook({
       variables: {
         userId: userId,
-//        authors: bookToSave.volumeInfo.authors || ['No author to display'],
-        description: bookToSave.volumeInfo.description,
-        title: bookToSave.volumeInfo.title,
+        authors: bookToSave.authors,
+        description: bookToSave.description,
+        title: bookToSave.title,
         BookId: bookToSave.bookId,
-//        image: bookToSave.volumeInfo.imageLinks?.thumbnail || ''
+        image: bookToSave.image
       }
     });
+
+    console.log(response);
 
     setSavedBookIds([...savedBookIds, bookToSave.bookId]);    
   };
