@@ -88,7 +88,7 @@ const SearchBooks = () => {
         authors: bookToSave.authors,
         description: bookToSave.description,
         title: bookToSave.title,
-        BookId: bookToSave.bookId,
+        bookId: bookToSave.bookId,
         image: bookToSave.image
       }
     });

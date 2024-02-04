@@ -63,13 +63,13 @@ const resolvers = {
 
     //   return updatedUser;
     // },
-    saveBook: async (parent, { userId, authors, description, title, BookId, image}) => {
+    saveBook: async (parent, { userId, authors, description, title, bookId, image}) => {
 //      console.log("saveBook", userId, authors, description, title, BookId, image);
 
       return User.findOneAndUpdate(
         { _id: userId },
         {
-          $addToSet: { savedBooks: { authors: authors, description: description, bookId: BookId, image: image, title: title } },
+          $addToSet: { savedBooks: { authors: authors, description: description, bookId: bookId, image: image, title: title } },
         },
         {
           new: true,
@@ -77,11 +77,11 @@ const resolvers = {
         }
       );
     },
-    removeBook: async (parent, { userId, BookId }) => {
-      console.log("removeBook", userId, BookId);
+    removeBook: async (parent, { userId, bookId }) => {
+      console.log("removeBook", userId, bookId);
       return User.findOneAndUpdate(
         { _id: userId },
-        { $pull: { savedBooks: { BoodId: BookId } } },
+        { $pull: { savedBooks: { bookId: bookId } } },
         { new: true }
       );
     },
