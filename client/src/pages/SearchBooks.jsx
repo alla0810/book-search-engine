@@ -54,7 +54,7 @@ const SearchBooks = () => {
         bookId: book.id,
         authors: book.volumeInfo.authors || ['No author to display'],
         title: book.volumeInfo.title,
-        description: book.volumeInfo.description,
+        description: book.volumeInfo.description || 'No Description',
         image: book.volumeInfo.imageLinks?.thumbnail || '',
       }));
 
@@ -86,7 +86,7 @@ const SearchBooks = () => {
       variables: {
         userId: userId,
         authors: bookToSave.authors,
-        description: bookToSave.description,
+        description: bookToSave.description ,
         title: bookToSave.title,
         bookId: bookToSave.bookId,
         image: bookToSave.image
