@@ -47,13 +47,10 @@ GIVEN a book search engine
 ## Contact
   * Author: Kyosook Shin
   * Author's Email: kyosook.shin@gmail.com  
-  * GitHub: https://github.com/alla0810/e-commerce
+  * GitHub: https://github.com/alla0810/book-search-engine
+  * Render deployment: https://book-search-engine-etjd.onrender.com/
 
 
 ## Screenshot  
 
 <img src='./images/screen1.png' width="800">  
-<img src='./images/screen2.png' width="800">
-<img src='./images/screen3.png' width="800">  
-<img src='./images/screen4.png' width="800">  
-<img src='./images/screen5.png' width="800">  
