@@ -20,7 +20,7 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
-    "bcrypt": "^5.1.1"
+    "bcryptjs": "^2.4.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
